@@ -1,0 +1,41 @@
+{
+  "product": "Cooling Keyboard Palm-Rest (땀 날아가는 키보드 팜레스트)",
+  "concept": "손 땀을 말려주는 냉각팬 + 높이·각도 조절 손목 받침대",
+  "disclaimer": "reference not verified — 개념 설계 추정치이며 실측/양산 검증값이 아닙니다.",
+  "dimensions": {
+    "width_mm": 440,
+    "depth_mm": 90,
+    "height_range_mm": [10, 45],
+    "angle_range_deg": [-5, 20]
+  },
+  "cooling": {
+    "fan_type": "USB brushless axial fan",
+    "fan_size_mm": 45,
+    "fan_count": 2,
+    "airflow_cfm_each": 4.5,
+    "outlet_pattern": "상판 미세 타공 (perforated top plate)",
+    "max_air_velocity_mps": 3.5
+  },
+  "power": {
+    "input": "USB-C 5V",
+    "typical_current_a": 0.3,
+    "max_current_a": 0.5,
+    "max_power_w": 2.5,
+    "note": "노트북/모니터 USB 포트로 충분히 구동 가능한 범위로 설계"
+  },
+  "adjustment": {
+    "height": "스텝식 래칫 또는 나사식 리프트",
+    "angle": "전면 힌지 틸트",
+    "detents": true
+  },
+  "materials": {
+    "top_surface": "실리콘 겔 + 통기성 메시 커버",
+    "body": "ABS + TPU 논슬립 베이스",
+    "internal_frame": "알루미늄 각도 힌지"
+  },
+  "ergonomics": {
+    "ideal_angle_deg": 8,
+    "ideal_height_mm": 25,
+    "goal": "손목 중립 자세 유지 + 접촉면 땀 증발 촉진"
+  }
+}

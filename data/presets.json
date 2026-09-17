@@ -1,0 +1,28 @@
+{
+  "presets": [
+    {
+      "id": "sweaty-summer",
+      "label": "여름 · 손땀 많음",
+      "desc": "덥고 습한 환경에서 손땀을 빠르게 말리는 강한 설정",
+      "inputs": { "fan": 85, "height": 25, "angle": 8, "humidity": 70, "temp": 30 }
+    },
+    {
+      "id": "quiet-office",
+      "label": "조용한 사무실",
+      "desc": "저소음 우선, 은은한 바람으로 쾌적함 유지",
+      "inputs": { "fan": 35, "height": 25, "angle": 8, "humidity": 50, "temp": 24 }
+    },
+    {
+      "id": "carpal-relief",
+      "label": "손목 편안 (터널 완화)",
+      "desc": "중립 손목 각도 우선, 바람은 중간",
+      "inputs": { "fan": 45, "height": 28, "angle": 6, "humidity": 55, "temp": 25 }
+    },
+    {
+      "id": "winter-dry",
+      "label": "겨울 · 건조",
+      "desc": "건조한 환경 — 바람 최소, 과건조 방지",
+      "inputs": { "fan": 20, "height": 22, "angle": 8, "humidity": 30, "temp": 21 }
+    }
+  ]
+}

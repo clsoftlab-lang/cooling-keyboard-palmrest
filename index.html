@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<!--
+  SPDX-License-Identifier: Apache-2.0
+  Copyright 2026 CLSOFTLAB (씨엘소프트랩), Dr. Lee Il-guk (이일국)
+-->
+<html lang="ko" data-theme="auto">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>땀 날아가는 키보드 팜레스트 · 시뮬레이터</title>
+  <meta name="description" content="손 땀을 말려주는 냉각팬 + 높이·각도 조절 키보드 팜레스트 — 인터랙티브 시뮬레이터와 설계/스펙." />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><text y='14' font-size='14'>💨</text></svg>" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <div class="brand">
+        <span class="brand-emoji" aria-hidden="true">💨⌨️</span>
+        <div>
+          <h1>땀 날아가는 키보드 팜레스트</h1>
+          <p class="tagline">손 땀을 말려주는 냉각팬 팜레스트 · 인터랙티브 시뮬레이터</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <span class="badge badge-demo" id="demo-badge"><strong>DEMO 모드</strong></span>
+        <button id="theme-toggle" class="btn btn-ghost" type="button" aria-label="테마 전환">🌗 테마</button>
+      </div>
+    </div>
+    <div class="wrap notice" id="concept-boundary">
+      <strong>개념 경계(Concept boundaries):</strong>
+      이 사이트는 <strong>개념 설계 + 추정 시뮬레이터</strong>입니다. 수치는 단순 모델 추정치이며
+      <strong>실측·양산·의료 검증값이 아닙니다 (reference not verified).</strong>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <!-- 아이디어 출처 -->
+    <section id="idea-origin" class="card">
+      <h2>🎓 아이디어 출처 / Idea origin</h2>
+      <p>
+        이 아이디어는 <strong>용인대학교(Yongin University)</strong>에서 진행된
+        이일국 박사(Dr. Lee Il-guk)의 창업 수업 중 한 수강생이 낸 돋보이는 발상에서 출발했습니다.
+        원 발상에 감사드리며, 본 프로젝트는 저작·상표 없이 처음부터 새로 작성한
+        <strong>클린룸(clean-room)</strong> 구현입니다. 개인정보(PII)는 포함하지 않습니다.
+      </p>
+      <p class="muted">
+        This concept began as a standout student idea in Dr. Lee Il-guk's entrepreneurship class
+        at Yongin University. Built clean-room with gratitude — no copied text, no PII, no trademarks.
+      </p>
+    </section>
+
+    <!-- 시뮬레이터 -->
+    <section id="simulator" class="card">
+      <h2>🖐️ 인터랙티브 시뮬레이터</h2>
+      <div class="sim-grid">
+        <!-- SVG 무대 -->
+        <figure id="svg-stage" class="stage" aria-label="팜레스트 위 손과 공기 흐름 애니메이션">
+          <svg id="palmrest-svg" viewBox="0 0 460 300" role="img" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="restGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="var(--rest-top)" />
+                <stop offset="1" stop-color="var(--rest-bottom)" />
+              </linearGradient>
+            </defs>
+            <!-- 책상 -->
+            <rect x="0" y="250" width="460" height="50" fill="var(--desk)" />
+            <!-- 키보드 힌트 -->
+            <rect x="250" y="228" width="190" height="24" rx="4" fill="var(--keyboard)" />
+            <g id="key-hints" fill="var(--key)"></g>
+
+            <!-- 높이/각도 조절되는 팜레스트 + 손 그룹 -->
+            <g id="rest-group">
+              <!-- 팜레스트 본체 -->
+              <g id="rest-body">
+                <rect x="40" y="196" width="210" height="34" rx="10" fill="url(#restGrad)" stroke="var(--stroke)" stroke-width="2"/>
+                <!-- 타공(공기 배출) -->
+                <g id="vents" fill="var(--vent)"></g>
+              </g>
+              <!-- 손 (단순 측면 실루엣) -->
+              <g id="hand">
+                <path d="M55 196 q10 -34 46 -34 q40 0 92 6 q26 3 26 14 q0 10 -18 12 q30 2 30 12 q0 9 -22 10 q18 2 18 10 q0 8 -20 8 q10 2 10 8 q0 8 -24 8 l-96 0 q-40 0 -50 -30 q-4 -12 8 -44 z"
+                      fill="var(--skin)" stroke="var(--skin-line)" stroke-width="2" stroke-linejoin="round"/>
+                <!-- 땀방울 (fan 낮을 때 보임) -->
+                <g id="sweat" fill="var(--sweat)"></g>
+              </g>
+            </g>
+
+            <!-- 공기 흐름 (fan 세기에 따라 애니메이션) -->
+            <g id="airflow" stroke="var(--air)" stroke-width="3" stroke-linecap="round" fill="none"></g>
+
+            <!-- 각도 표시 -->
+            <text id="angle-label" x="20" y="285" fill="var(--muted)" font-size="12">각도 8°</text>
+          </svg>
+          <figcaption class="muted small">측면 개념도 — 손 위로 흐르는 바람과 땀 증발을 표현 (추정)</figcaption>
+        </figure>
+
+        <!-- 컨트롤 -->
+        <div id="controls" class="controls">
+          <div class="preset-row" id="presets" aria-label="프리셋"></div>
+
+          <label class="ctl">
+            <span>팬 세기 <output id="out-fan">55</output>%</span>
+            <input type="range" id="in-fan" min="0" max="100" step="5" value="55" />
+          </label>
+          <label class="ctl">
+            <span>높이 <output id="out-height">25</output> mm</span>
+            <input type="range" id="in-height" min="10" max="45" step="1" value="25" />
+          </label>
+          <label class="ctl">
+            <span>각도 <output id="out-angle">8</output>°</span>
+            <input type="range" id="in-angle" min="-5" max="20" step="1" value="8" />
+          </label>
+          <label class="ctl">
+            <span>실내 습도 <output id="out-humidity">55</output>%</span>
+            <input type="range" id="in-humidity" min="20" max="90" step="1" value="55" />
+          </label>
+          <label class="ctl">
+            <span>실내 온도 <output id="out-temp">26</output>°C</span>
+            <input type="range" id="in-temp" min="16" max="36" step="1" value="26" />
+          </label>
+
+          <button id="reset-btn" class="btn btn-ghost" type="button">↺ 기본값으로 초기화</button>
+        </div>
+      </div>
+
+      <!-- 지표 -->
+      <div id="metrics" class="metrics" aria-live="polite">
+        <div class="metric"><span class="m-label">손 건조도(추정)</span><span class="m-val" id="m-dryness">–</span></div>
+        <div class="metric"><span class="m-label">쾌적 지수(추정)</span><span class="m-val" id="m-comfort">–</span></div>
+        <div class="metric"><span class="m-label">바람 속도(추정)</span><span class="m-val" id="m-air">–</span></div>
+        <div class="metric"><span class="m-label">체감 온도(추정)</span><span class="m-val" id="m-perceived">–</span></div>
+        <div class="metric"><span class="m-label">소음(추정)</span><span class="m-val" id="m-noise">–</span></div>
+        <div class="metric"><span class="m-label">전력(추정)</span><span class="m-val" id="m-power">–</span></div>
+      </div>
+      <p id="ergo-guidance" class="guidance"></p>
+    </section>
+
+    <!-- AI -->
+    <section id="ai-panel" class="card">
+      <h2>🤖 AI 기능 <span class="badge" id="ai-mode-badge">mock</span></h2>
+      <p class="muted small">
+        데모는 오프라인 <strong>MockProvider</strong>로 동작합니다. 실제 Claude 연동은
+        <code>server/</code> 프록시 + <code>ai/config.js</code> 설정으로 활성화됩니다 (API 키는 서버에만).
+      </p>
+      <div class="ai-tabs">
+        <button class="ai-tab is-active" data-task="setup" type="button">셋업 도우미</button>
+        <button class="ai-tab" data-task="explain" type="button">결과 설명</button>
+        <button class="ai-tab" data-task="coach" type="button">자세·휴식 코칭</button>
+      </div>
+      <div class="ai-controls" id="ai-setup-controls">
+        <label class="ctl inline">손땀 정도
+          <select id="ai-sweat">
+            <option value="low">적음</option>
+            <option value="medium" selected>보통</option>
+            <option value="high">많음</option>
+          </select>
+        </label>
+      </div>
+      <button id="ai-run" class="btn btn-primary" type="button">AI 실행</button>
+      <pre id="ai-output" class="ai-output" aria-live="polite">여기에 AI 응답이 표시됩니다.</pre>
+    </section>
+
+    <!-- 스펙 / BOM -->
+    <section id="spec-page" class="card">
+      <h2>🛠️ 설계 / 스펙</h2>
+      <div id="specs" class="specs"></div>
+
+      <h3>대략 BOM <span class="muted small">(reference not verified)</span></h3>
+      <div class="table-scroll">
+        <table id="bom">
+          <thead>
+            <tr><th>부품</th><th class="num">수량</th><th class="num">단가(원)</th><th class="num">소계(원)</th><th>비고</th></tr>
+          </thead>
+          <tbody id="bom-body"></tbody>
+          <tfoot>
+            <tr><th colspan="3">합계(추정)</th><th class="num" id="bom-total">–</th><th></th></tr>
+          </tfoot>
+        </table>
+      </div>
+
+      <div class="ergo-note">
+        <h3>인체공학 노트</h3>
+        <p>
+          손목은 위아래로 꺾이지 않는 <strong>중립 자세</strong>가 이상적입니다. 팜레스트는 손목이 아니라
+          손바닥 아랫부분을 받쳐야 하며, 권장 시작값은 <strong>높이 25mm · 각도 8°</strong>입니다.
+          냉각팬은 접촉면 땀을 증발시켜 미끄러움과 눅눅함을 줄이는 것을 목표로 합니다.
+          이는 편의 기능이며 의료 치료가 아닙니다.
+        </p>
+      </div>
+    </section>
+
+    <!-- 모델 설명 -->
+    <section id="model-note" class="card">
+      <h2>📐 추정 모델 설명</h2>
+      <ul class="model-list">
+        <li><strong>바람 속도</strong> = 최대 3.5m/s × 팬% × 높이보정 × 각도보정.</li>
+        <li><strong>손 건조도</strong> ∝ 바람속도^0.8 × (1 − 습도/100) × 온도별 포화수증기압비 (Magnus 식).</li>
+        <li><strong>쾌적 지수</strong> = 건조·열쾌적·인체공학 가중합 − 강풍 페널티.</li>
+        <li><strong>소음</strong> = 18 + 27 × (팬%)^1.4 dB, <strong>전력</strong> = 0.15 + 2.3 × (팬%)^2.6 W (5V USB).</li>
+      </ul>
+      <p class="muted small">모든 산식은 <code>comfort.js</code>에 문서화되어 있고 <code>check.mjs</code>에서 단위 테스트됩니다.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p><strong>기여자 / Contributors:</strong> Dr. Lee Il-guk (이일국), LWJ, LMJ, Claude</p>
+      <p><strong>라이선스:</strong> 코드 Apache-2.0 · 문서/콘텐츠 CC BY 4.0</p>
+      <p class="muted small">Not an official Anthropic product. 개념 설계 데모 — 수치는 추정치입니다.</p>
+    </div>
+  </footer>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+{
+  "currency": "KRW",
+  "disclaimer": "reference not verified — 개략 단가는 참고용 추정이며 실제 견적/BOM이 아닙니다.",
+  "bom": [
+    { "part": "45mm USB 브러시리스 축류팬", "qty": 2, "unit_price": 3500, "note": "저소음 슬리브 베어링" },
+    { "part": "통기성 실리콘 겔 상판 + 메시 커버", "qty": 1, "unit_price": 6000, "note": "피부 접촉/증발면" },
+    { "part": "높이조절 래칫 기구 (스텝식)", "qty": 2, "unit_price": 2500, "note": "10~45mm" },
+    { "part": "전면 틸트 힌지 (알루미늄)", "qty": 1, "unit_price": 3000, "note": "-5~20도" },
+    { "part": "ABS 하우징 (상/하 셸)", "qty": 1, "unit_price": 4500, "note": "사출 개념" },
+    { "part": "TPU 논슬립 베이스 패드", "qty": 1, "unit_price": 1500, "note": "미끄럼 방지" },
+    { "part": "USB-C 입력 + 팬 속도 컨트롤 PCB", "qty": 1, "unit_price": 4000, "note": "PWM 3단/무단" },
+    { "part": "USB-C 케이블 (1.2m)", "qty": 1, "unit_price": 1500, "note": "동봉" },
+    { "part": "나사/스프링/조립 부자재", "qty": 1, "unit_price": 1000, "note": "체결류" }
+  ]
+}

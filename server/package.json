@@ -1,0 +1,15 @@
+{
+  "name": "cooling-palmrest-ai-proxy",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Server-side Anthropic proxy for the Cooling Keyboard Palm-Rest demo (keeps API key off the client).",
+  "license": "Apache-2.0",
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "start": "node index.mjs"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.70.0"
+  }
+}

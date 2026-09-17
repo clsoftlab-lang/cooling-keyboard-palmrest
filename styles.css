@@ -226,3 +226,8 @@ code { background: var(--bg); padding: 1px 5px; border-radius: 5px; font-size: 0
   .specs { grid-template-columns: repeat(2, 1fr); }
   .site-header h1 { font-size: 1.5rem; }
 }
+
+/* 무인 자동 추천 카드 — accent 좌측 보더로 은은하게 강조 */
+.auto-rec {
+  border-left: 3px solid var(--accent-2);
+}

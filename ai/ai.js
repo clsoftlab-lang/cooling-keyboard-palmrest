@@ -90,30 +90,43 @@ async function streamMock(text, onToken) {
 }
 
 // ── Public API ──────────────────────────────────────────────────────────────
+// AUTO-FALLBACK (무인): if AI_ENDPOINT is empty, or the endpoint call fails /
+// returns 429 {fallback:true} / raises a network error → transparently fall
+// back to the deterministic offline mock so the app never breaks. Streaming is
+// preserved via onToken in every path.
 export async function askAI(task, payload, { onToken } = {}) {
   if (!AI_ENDPOINT) {
-    const text = runMock(task, payload);
-    return streamMock(text, onToken);
+    return streamMock(runMock(task, payload), onToken);
   }
 
-  const res = await fetch(AI_ENDPOINT, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ task, payload }),
-  });
-  if (!res.ok || !res.body) throw new Error(`AI 요청 실패: ${res.status}`);
+  try {
+    const res = await fetch(AI_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ task, payload }),
+    });
 
-  const reader = res.body.getReader();
-  const decoder = new TextDecoder();
-  let full = '';
-  for (;;) {
-    const { value, done } = await reader.read();
-    if (done) break;
-    const chunk = decoder.decode(value, { stream: true });
-    full += chunk;
-    emit(onToken, chunk);
+    // Cost guardrail / budget exceeded → server sends 429 {fallback:true}.
+    if (res.status === 429) {
+      return streamMock(runMock(task, payload), onToken);
+    }
+    if (!res.ok || !res.body) throw new Error(`AI 요청 실패: ${res.status}`);
+
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let full = '';
+    for (;;) {
+      const { value, done } = await reader.read();
+      if (done) break;
+      const chunk = decoder.decode(value, { stream: true });
+      full += chunk;
+      emit(onToken, chunk);
+    }
+    return full;
+  } catch {
+    // Network error / server down → never break: serve the offline mock.
+    return streamMock(runMock(task, payload), onToken);
   }
-  return full;
 }
 
 export const AI_TASKS = ['setup', 'explain', 'coach'];

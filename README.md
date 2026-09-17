@@ -49,8 +49,30 @@ Three AI helpers, all available in mock mode:
 To enable **real Claude**:
 
 1. Run the backend proxy in [`server/`](server/README.md) and set
-   `ANTHROPIC_API_KEY` (model `claude-opus-5`) as a server env var.
+   `ANTHROPIC_API_KEY` (cost-first default model `claude-haiku-4-5`) as a server env var.
 2. Set `AI_ENDPOINT` in [`ai/config.js`](ai/config.js) to the proxy URL.
+
+**The API key lives server-side only — never in the browser or the repo.**
+
+## ⚙️ 고도화 — 무인·저비용 실 AI 연동
+
+- **비용 우선 기본 모델**: `claude-haiku-4-5` (~**$1 / $5 per MTok** in/out). 품질이 더 필요하면
+  `AI_MODEL=claude-sonnet-5` 또는 `claude-opus-5` 로 상향. (Haiku 4.5 는 adaptive thinking/effort 를
+  받지 않으므로 프록시가 자동으로 생략, 상위 모델에는 `thinking:adaptive` + `effort`(기본 low) 적용.)
+- **프롬프트 캐싱**: 안정적인 per-task 시스템 프롬프트를 `cache_control:{type:'ephemeral'}` 블록으로
+  전송 → 반복 호출은 캐시를 읽어 비용 절감.
+- **출력 상한**: 태스크당 `max_tokens` 기본 ~700 로 억제.
+- **비용 가드레일**: per-IP rate limit(기본 20/분) + 월 토큰 예산(`AI_MONTHLY_TOKEN_CAP`, 기본
+  2,000,000). 초과 시 HTTP 429 `{fallback:true}` 반환.
+- **대략 비용(추정)**: 요청당 in ~1.2K / out ~0.5K 토큰 가정 시 **1,000 요청 ≈ $3–4** 수준이며,
+  캐시 적중 시 더 낮아집니다 (reference not verified).
+- **무인 무료 배포**: `server/worker.js` 를 **Cloudflare Workers** 무료 티어에 원클릭 배포 —
+  `wrangler secret put ANTHROPIC_API_KEY` 후 `wrangler deploy` (서버 상주 관리 불필요). 자세한 내용은
+  [`server/README.md`](server/README.md).
+- **자동 목업 폴백(무인)**: 엔드포인트 실패 / 429 `{fallback:true}` / 네트워크 오류 시 `ai/ai.js` 가
+  자동으로 오프라인 목업으로 전환 → 앱은 절대 멈추지 않습니다.
+- **무인 자동 추천**: 페이지 로드 시 현재 온·습도로 "오늘 환경 맞춤 설정 추천"을 `askAI` 로 자동 생성
+  (목업 오프라인으로도 동작).
 
 **The API key lives server-side only — never in the browser or the repo.**
 

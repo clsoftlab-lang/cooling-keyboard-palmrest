@@ -51,7 +51,7 @@ for (const f of allFiles.filter((f) => f.endsWith('.json') && f.includes('data')
 // 2. node --check all JS ----------------------------------------------------
 section('2. node --check (all .js / .mjs)');
 const jsFiles = allFiles.filter((f) => /\.(mjs|js)$/.test(f));
-const needAi = ['ai/config.js', 'ai/ai.js', 'server/index.mjs'];
+const needAi = ['ai/config.js', 'ai/ai.js', 'server/index.mjs', 'server/worker.js'];
 for (const req of needAi) {
   if (!jsFiles.some((f) => relative(ROOT, f).replace(/\\/g, '/') === req)) bad(`missing ${req}`);
 }
@@ -139,7 +139,9 @@ section('6. AI key hygiene');
 const cfg = await import('./ai/config.js');
 assert(cfg.AI_ENDPOINT === '', 'AI_ENDPOINT is empty (demo = mock)');
 
-const keyRe = /sk-ant-[A-Za-z0-9_-]{20,}/g;
+// Built via string concat so this scanner's own source never false-positives
+// (and so README / .env.example `sk-ant…` mentions stay clean).
+const keyRe = new RegExp('sk-' + 'ant-[A-Za-z0-9_-]{20,}', 'g');
 let leaked = 0;
 for (const f of allFiles.filter((f) => /\.(js|mjs|json|html|md|txt|css)$/.test(f))) {
   const text = readFileSync(f, 'utf8');
@@ -151,6 +153,11 @@ for (const f of allFiles.filter((f) => /\.(js|mjs|json|html|md|txt|css)$/.test(f
   }
 }
 if (!leaked) ok('no real sk-ant-… key committed (placeholders ignored)');
+
+// .gitignore must exclude .env; no .env committed.
+const gi = readFileSync(join(ROOT, '.gitignore'), 'utf8');
+assert(/(^|\n)\.env(\s|$)/.test(gi) || gi.includes('.env'), '.gitignore excludes .env');
+assert(!allFiles.some((f) => /(^|[\\/])\.env$/.test(relative(ROOT, f))), 'no .env committed');
 
 // summary -------------------------------------------------------------------
 console.log(`\n${failures === 0 ? '✅ ALL CHECKS PASSED' : `❌ ${failures} CHECK(S) FAILED`}`);

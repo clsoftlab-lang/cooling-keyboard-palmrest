@@ -245,6 +245,30 @@ function setupAi() {
   });
 }
 
+// ── Autonomous on-load recommendation (온습도 기반, 무인) ─────────────────────
+// Builds an auto digest from the app's existing engines via askAI('setup').
+// Works offline through the deterministic mock, so it never breaks (무인).
+async function runAutoRec() {
+  const out = $('auto-rec-output');
+  const badge = $('auto-rec-mode');
+  if (!out) return;
+  if (badge) badge.textContent = isMock() ? 'mock' : 'live';
+  const inputs = readInputs();
+  const payload = { humidity: inputs.humidity, temp: inputs.temp, sweat: 'medium' };
+  try {
+    let acc = '';
+    await askAI('setup', payload, {
+      onToken: (t) => {
+        acc += t;
+        out.textContent = acc;
+      },
+    });
+    if (!acc) out.textContent = '추천을 생성하지 못했습니다.';
+  } catch (err) {
+    out.textContent = `⚠️ ${err.message}`;
+  }
+}
+
 // ── Theme toggle ────────────────────────────────────────────────────────────
 function setupTheme() {
   const KEY = 'palmrest.theme';
@@ -283,6 +307,7 @@ async function init() {
 
   update();
   setupAi();
+  runAutoRec(); // 무인 자동 추천 (온습도 기반) — mock offline로도 동작
 
   try {
     const [specs, parts, presets] = await Promise.all([
